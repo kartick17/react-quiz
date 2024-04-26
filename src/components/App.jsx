@@ -7,6 +7,7 @@ import Header from './Header'
 import Question from './Question'
 import StartScreen from './StartScreen'
 import NextButton from './NextButton'
+import Progress from './Progress'
 
 const initialState = {
   questions: [],
@@ -15,6 +16,7 @@ const initialState = {
   status: 'loading',
   index: 0,
   answer: null,
+  points: 0,
 }
 
 function reducer(state, action) {
@@ -68,6 +70,7 @@ export default function App() {
   )
 
   const numQuestion = questions.length
+  const totalPoints = questions.reduce((acc, curr) => acc + curr.points, 0)
 
   useEffect(
     function () {
@@ -90,6 +93,13 @@ export default function App() {
         )}
         {status === 'active' && (
           <>
+            <Progress
+              index={index}
+              numQuestion={numQuestion}
+              points={points}
+              totalPoints={totalPoints}
+              answer={answer}
+            />
             <Question
               question={questions[index]}
               dispatch={dispatch}
