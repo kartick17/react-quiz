@@ -4,8 +4,8 @@ import Main from './Main'
 import Error from './Error'
 import Loader from './Loader'
 import Header from './Header'
-import StartScreen from './StartScreen'
 import Question from './Question'
+import StartScreen from './StartScreen'
 
 const initialState = {
   questions: [],
@@ -13,6 +13,7 @@ const initialState = {
   // "loading","error", "ready", "active", "finished"
   status: 'loading',
   index: 0,
+  answer: null,
 }
 
 function reducer(state, action) {
@@ -36,13 +37,24 @@ function reducer(state, action) {
         status: 'active',
       }
 
+    case 'newAnswer':
+      const question = state.questions.at(state.index)
+      return {
+        ...state,
+        answer: action.payload,
+        points:
+          action.payload === question.correctOption
+            ? state.points + question.points
+            : state.points,
+      }
+
     default:
       throw new Error('Action unknown')
   }
 }
 
 export default function App() {
-  const [{ questions, status, index }, dispatch] = useReducer(
+  const [{ questions, status, index, answer, points }, dispatch] = useReducer(
     reducer,
     initialState
   )
@@ -68,7 +80,14 @@ export default function App() {
         {status === 'ready' && (
           <StartScreen numQuestion={numQuestion} dispatch={dispatch} />
         )}
-        {status === 'active' && <Question question={questions[index]} />}
+        {status === 'active' && (
+          <Question
+            question={questions[index]}
+            dispatch={dispatch}
+            answer={answer}
+            points={points}
+          />
+        )}
       </Main>
     </div>
   )
