@@ -10,8 +10,12 @@ function Options({ question, dispatch, answer }) {
             disabled={hasAnswered}
             onClick={() => dispatch({ type: 'newAnswer', payload: index })}
             className={`btn btn-option ${index === answer ? 'answer' : ''} ${
+              hasAnswered && (index === question.correctOption ? 'correct' : '')
+            } ${
               hasAnswered &&
-              (index === question.correctOption ? 'correct' : 'wrong')
+              (index === answer && answer !== question.correctOption
+                ? 'wrong'
+                : '')
             }`}
             key={option}
           >
