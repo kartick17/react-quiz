@@ -1,6 +1,6 @@
 import React from 'react'
 
-function FinishScreen({ points, totalPoints, highscore }) {
+function FinishScreen({ points, totalPoints, highscore, dispatch }) {
   return (
     <>
       <p className='result'>
@@ -10,6 +10,12 @@ function FinishScreen({ points, totalPoints, highscore }) {
       <p className='highscore'>
         (Highscore: <strong>{highscore}</strong> ponts)
       </p>
+      <button
+        className='btn btn-ui'
+        onClick={() => dispatch({ type: 'restart' })}
+      >
+        Restart Quiz
+      </button>
     </>
   )
 }

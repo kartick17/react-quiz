@@ -68,6 +68,9 @@ function reducer(state, action) {
           state.points > state.highscore ? state.points : state.highscore,
       }
 
+    case 'restart':
+      return { ...initialState, questions: state.questions, status: 'ready' }
+
     default:
       throw new Error('Action unknown')
   }
@@ -80,15 +83,12 @@ export default function App() {
   const numQuestion = questions.length
   const totalPoints = questions.reduce((acc, curr) => acc + curr.points, 0)
 
-  useEffect(
-    function () {
-      fetch(`http://localhost:8000/questions`)
-        .then((res) => res.json())
-        .then((data) => dispatch({ type: 'dataReceived', payload: data }))
-        .catch((err) => dispatch({ type: 'dataFailed' }))
-    },
-    [initialState]
-  )
+  useEffect(function () {
+    fetch(`http://localhost:8000/questions`)
+      .then((res) => res.json())
+      .then((data) => dispatch({ type: 'dataReceived', payload: data }))
+      .catch((err) => dispatch({ type: 'dataFailed' }))
+  }, [])
 
   return (
     <div className='app'>
@@ -127,6 +127,7 @@ export default function App() {
             points={points}
             totalPoints={totalPoints}
             highscore={highscore}
+            dispatch={dispatch}
           />
         )}
       </Main>
